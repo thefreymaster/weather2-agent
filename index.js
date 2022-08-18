@@ -1,6 +1,6 @@
 const express = require("express");
 const app = express();
-const port = 6700;
+const port = 6800;
 const imu = require("node-sense-hat").Imu;
 const IMU = new imu.IMU();
 const matrix = require("node-sense-hat").Leds;
