@@ -5,6 +5,9 @@ const imu = require("node-sense-hat").Imu;
 const IMU = new imu.IMU();
 const matrix = require("node-sense-hat").Leds;
 
+const os = require("os");
+const networkInterfaces = os.networkInterfaces();
+
 const { initializeApp } = require("firebase-admin/app");
 const admin = require("firebase-admin");
 const config = require("./config.json");
@@ -16,7 +19,6 @@ initializeApp({
 
 const { getDatabase } = require("firebase-admin/database");
 const db = getDatabase();
-const dbRef = db.ref(`/${config?.room_id}`);
 
 matrix.clear();
 
@@ -67,7 +69,8 @@ server.listen(port, () => {
       "Error! room_id is undefined in config.json.  Add a new key to the config.json named 'room_id', and restart the server."
     );
   }
-  console.log("Weather Station running on :6700");
+  console.log(`Weather Agent running on ${networkInterfaces}:${port}`);
+  db.ref(`/rooms/${config?.room_id}`).push(config?.room_id);
   getNewWeatherData();
 
   return run();
