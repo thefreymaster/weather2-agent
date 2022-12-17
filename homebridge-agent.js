@@ -22,6 +22,7 @@ const sendMessage = (payload) => {
 
 app.post("/api/temperature", (req, res) => {
   const { name, value } = req.body;
+  console.log({ name, value });
 
   sendMessage({
     topic: "setValue",
