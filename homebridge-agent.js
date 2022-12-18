@@ -70,13 +70,15 @@ app.post("/api/humidity/add", (req, res) => {
   res.send("Humidity device created");
 });
 
-app.get("/api/status", () => ({
-  status: "working",
-  version: "0.0.1",
-}));
+app.get("/api/status", (req, res) => {
+  res.send({
+    status: "working",
+    version: "0.0.1",
+  });
+});
 
-app.get("/api", () => {
-  return {
+app.get("/api", (req, res) => {
+  res.send({
     "/temperature": {
       method: "POST",
       description: "Post the temperature data to a sensor",
@@ -107,5 +109,5 @@ app.get("/api", () => {
         },
       },
     },
-  };
+  });
 });
