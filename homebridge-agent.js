@@ -12,12 +12,14 @@ app.use(express.json());
 
 const server = require("http").Server(app);
 
+const convertToF = (celsius) => celsius * (9 / 5) + 32;
+
 server.listen(port, () => {
   console.log(`Weather Agent running on ${networkInterfaces}:${port}`);
 });
 
 const sendMessage = (payload) => {
-  ws.send(JSON.stringify(payload));
+  return ws.send(JSON.stringify(payload));
 };
 
 app.post("/api/remove", (req, res) => {
@@ -33,7 +35,7 @@ app.post("/api/remove", (req, res) => {
 
 app.post("/api/temperature", (req, res) => {
   const { name, value } = req.body;
-  console.log({ name, value });
+  console.log({ name, value: convertToF(value) });
 
   sendMessage({
     topic: "setValue",
