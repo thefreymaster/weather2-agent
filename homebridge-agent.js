@@ -20,6 +20,17 @@ const sendMessage = (payload) => {
   ws.send(JSON.stringify(payload));
 };
 
+app.post("/api/remove", (req, res) => {
+  const { name } = req.body;
+  console.log({ name });
+
+  sendMessage({
+    topic: "remove",
+    payload: { name },
+  });
+  res.send("Device removed");
+});
+
 app.post("/api/temperature", (req, res) => {
   const { name, value } = req.body;
   console.log({ name, value });

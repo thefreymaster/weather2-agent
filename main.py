@@ -12,7 +12,7 @@ led = machine.Pin("LED", machine.Pin.OUT)
 wlan = network.WLAN(network.STA_IF)
 
 sensor = dht.DHT11(Pin(16)) 
-deviceId = 'MasterBedroomTempSensor'
+deviceId = 'BasementTempSensor'
 
 wlan.active(True)
 wlan.connect('SKYNET-IOT', 'austintexas@512')
@@ -27,16 +27,16 @@ def runProgram():
         temperature_post_data = ujson.dumps({ 'name': deviceId, 'value': temperature })
         r = urequests.post("http://192.168.1.118:6800/api/temperature", headers = {'content-type': 'application/json'}, data = temperature_post_data)
         r.close()
-        print('Data posted successfully, sleeping for 300s...')
-        sleep(300)
+        print('Data posted successfully, sleeping for 60s...')
+        sleep(60)
         runProgram()
     except BaseException as err:
-        print('An error has occured while trying to post weather data... trying again in 300s...')
+        print('An error has occured while trying to post weather data... trying again in 60s...')
         print(err)
-        sleep(300)
+        sleep(60)
         runProgram()
 
-max_wait = 10
+max_wait = 100
 while max_wait > 0:
     if wlan.status() < 0 or wlan.status() >= 3:
         break
@@ -57,4 +57,5 @@ else:
         print('An error has occured while trying to register new room... trying again...')
         print(err)
         sleep(1)
+
 
