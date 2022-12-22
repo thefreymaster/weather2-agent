@@ -12,10 +12,13 @@ led = machine.Pin("LED", machine.Pin.OUT)
 wlan = network.WLAN(network.STA_IF)
 
 sensor = dht.DHT11(Pin(16)) 
-deviceId = 'BasementTempSensor'
+deviceId = 'MovieTheaterTempSensor'
 
 wlan.active(True)
 wlan.connect('SKYNET-IOT', 'austintexas@512')
+
+def convertToF(celsius): 
+  return celsius * (9 / 5) + 32;
 
 def runProgram():
     print('Attempting to collect temperature data...')
@@ -23,15 +26,17 @@ def runProgram():
         led.on()
         sensor.measure()
         temperature = sensor.temperature()
-        print('Current temp is: ', temperature)
+        print('Current temp is: ', convertToF(temperature))
         temperature_post_data = ujson.dumps({ 'name': deviceId, 'value': temperature })
         r = urequests.post("http://192.168.1.118:6800/api/temperature", headers = {'content-type': 'application/json'}, data = temperature_post_data)
         r.close()
         print('Data posted successfully, sleeping for 60s...')
+        led.off()
         sleep(60)
         runProgram()
     except BaseException as err:
         print('An error has occured while trying to post weather data... trying again in 60s...')
+        led.off()
         print(err)
         sleep(60)
         runProgram()

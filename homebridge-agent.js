@@ -6,6 +6,8 @@ const os = require("os");
 const networkInterfaces = os.networkInterfaces();
 const WebSocket = require("ws");
 
+const sensors = ["LivingroomTempSensor", "LizOfficeTempSensor", "MovieTheaterTempSensor"];
+
 const ws = new WebSocket(process.env.WEBSOCKET_SERVER_ADDRESS);
 
 app.use(express.json());
@@ -16,6 +18,7 @@ const convertToF = (celsius) => celsius * (9 / 5) + 32;
 
 server.listen(port, () => {
   console.log(`Weather Agent running on ${networkInterfaces}:${port}`);
+  console.log(`Homebridge websocket server: ${process.env.WEBSOCKET_SERVER_ADDRESS}`);
 });
 
 const sendMessage = (payload) => {
